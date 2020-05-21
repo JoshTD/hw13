@@ -30,7 +30,7 @@ export class AppComponent {
     }
   }
   onAddWorker(worker: MyWorker) {
-    if (worker.id == undefined) {
+    if (worker.id == null) {
       let id = this.workers.length > 0 ? this.workers[this.workers.length - 1].id + 1: 1;
       worker.id = id;
       this.workers.push(worker);

@@ -1,6 +1,7 @@
 import { Component, OnInit, Input, Output, EventEmitter } from '@angular/core';
 import { MyWorkerType, MyWorker } from 'src/app/shared/worker.model';
 import { FormGroup, FormControl, Validators } from '@angular/forms';
+import { getLocaleExtraDayPeriodRules } from '@angular/common';
 
 
 @Component({
@@ -15,37 +16,25 @@ export class AddformWorkerComponent implements OnInit {
   workerForm: FormGroup;
  
   @Output() addWorker = new EventEmitter<MyWorker>();
-  @Input() worker: MyWorker;
 
   constructor() { }
 
   ngOnInit() {
     this.workerForm = this.validate();
   }
-
   onAddWorker() {
-    let validation = this.validate(this.worker.name, this.worker.surname, this.worker.phone, this.worker.type);
-    if (validation.status == "INVALID") {
-      alert('Данные введены некорректно');
-      return;
-    } else {
-      let worker: MyWorker = {
-        name: this.worker.name,
-        surname: this.worker.surname,
-        phone: this.worker.phone,
-        type: this.worker.type
-      }
-      if (this.worker.id != undefined)
-        worker.id = this.worker.id; 
-      this.addWorker.emit(worker);
-      this.worker.name = undefined;
-      this.worker.surname = undefined;
-      this.worker.phone = undefined;
-      this.worker.type = 0;
-      this.worker.id = undefined;
-    }
+    let worker: MyWorker = {
+      name: this.workerForm.value.Name,
+      surname: this.workerForm.value.Surname,
+      phone: this.workerForm.value.Phone,
+      type: this.getType(this.workerForm.value.Type),
+      id: this.workerForm.value.Id
+    };
+    console.log(worker);
+    this.addWorker.emit(worker);
+    this.workerForm = this.validate();
   }
-  validate(name = null, surname = null, phone = null, type = 0) {
+  validate(name = null, surname = null, phone = null, type = 0, id = null) {
     return new FormGroup({
       Name: new FormControl({value: name, disabled: false}, [
         Validators.required, Validators.pattern('[A-Z,А-Я][a-z,а-я]+')
@@ -54,11 +43,22 @@ export class AddformWorkerComponent implements OnInit {
         Validators.required, Validators.pattern('[A-Z,А-Я][a-z,а-я]+')
       ]),
       Phone: new FormControl({value: phone, disabled: false}, [
-        Validators.required,
+        Validators.required
       ]),
       Type: new FormControl({value: type, disabled: false}, [
-        Validators.required,
-      ])
+        Validators.required
+      ]),
+      Id: new FormControl({value: id, disabled: false})
     })
+  }
+  getType(type: string) {
+    switch (type) {
+      case '0': return 0;
+      case '1': return 1;
+      case '2': return 2;
+      case '3': return 3;
+      default: return 0;
+    }
+
   }
 }

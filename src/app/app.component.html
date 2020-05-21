@@ -4,7 +4,7 @@
       <h1>{{ title }}</h1>
     </div>
   </div>
-  <app-addform-worker (addWorker)="onAddWorker($event)" [worker]="renameWorker"></app-addform-worker>
+  <app-addform-worker (addWorker)="onAddWorker($event)"></app-addform-worker>
   <app-table-workers 
   [title]="'Программисты'"
   [workers]="getByType(myWorkerType.programmer)"
