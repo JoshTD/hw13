@@ -12,17 +12,26 @@ export class TableWorkersComponent implements OnInit {
   @Input() workers: MyWorker[] = [];
   @Output() deleteWorker = new EventEmitter<number>();
   @Output() renameWorker = new EventEmitter<number>();
+  @Output() editWorker = new EventEmitter< MyWorker>();
+  @Output() editById: number;
 
   constructor() { }
 
   ngOnInit(): void {
   }
-
+  onEditWorker(worker: MyWorker) {
+    if (worker != null)
+      this.editWorker.emit(worker);
+    this.closeForm();
+  }
   onDeleteWorker(id: number) {
     this.deleteWorker.emit(id);
   }
   onRenameWorker(id: number) {
     this.renameWorker.emit(id);
+    this.editById = id;
   }
-
+  closeForm() {
+    this.editById = undefined;
+  }
 }

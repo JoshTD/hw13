@@ -1,27 +1,32 @@
 import { Component, OnInit, Input, Output, EventEmitter } from '@angular/core';
-import { MyWorkerType, MyWorker } from 'src/app/shared/worker.model';
+import { MyWorkersDataBase, MyWorker } from 'src/app/shared/worker.model';
 import { FormGroup, FormControl, Validators } from '@angular/forms';
 
-
 @Component({
-  selector: 'app-addform-worker',
-  templateUrl: './addform-worker.component.html',
-  styleUrls: ['./addform-worker.component.css']
+  selector: 'app-edit-worker',
+  templateUrl: './edit-worker.component.html',
+  styleUrls: ['./edit-worker.component.css']
 })
-export class AddformWorkerComponent implements OnInit {
+export class EditWorkerComponent implements OnInit {
+
+  @Input() workerId: number;
+  @Output() sendWorker = new EventEmitter<MyWorker>();
+  workers: MyWorker[] = MyWorkersDataBase;
+  worker: MyWorker;
   
-  myWorkerType = MyWorkerType;
+
   maskPhone = ['\+', '7','(', /[1-9]/, /\d/, /\d/, ')', /\d/, /\d/, /\d/, '-', /\d/, /\d/, /\d/, /\d/];
   workerForm: FormGroup;
- 
-  @Output() addWorker = new EventEmitter<MyWorker>();
 
-  constructor() { }
-
-  ngOnInit() {
+  constructor() {
     this.workerForm = this.validate();
   }
-  onAddWorker() {
+
+  ngOnInit() {
+    let index = this.workers.findIndex((item) => item.id === this.workerId);
+    this.workerForm = this.validate(this.workers[index].name, this.workers[index].surname, this.workers[index].phone, this.workers[index].type, this.workerId);
+  }
+  onEditWorker() {
     let worker: MyWorker = {
       name: this.workerForm.value.Name,
       surname: this.workerForm.value.Surname,
@@ -30,8 +35,12 @@ export class AddformWorkerComponent implements OnInit {
       id: this.workerForm.value.Id
     };
     console.log(worker);
-    this.addWorker.emit(worker);
-    this.workerForm = this.validate();
+    this.sendWorker.emit(worker);
+    this.workerForm.disable();
+  }
+  onCancel() {
+    this.sendWorker.emit(null);
+    this.workerForm.disable();
   }
   validate(name = null, surname = null, phone = null, type = 0, id = null) {
     return new FormGroup({

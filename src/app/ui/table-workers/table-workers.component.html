@@ -19,9 +19,10 @@
             <td>{{ worker.name }}</td>
             <td>{{ worker.surname }}</td>
             <td>{{ worker.phone }}</td>
-            <td><button (click)="onRenameWorker(worker.id)"class="btn btn-outline-primary btn-sm">Редактировать</button></td>
+            <td><button (click)="onRenameWorker(worker.id)"class="btn btn-outline-secondary btn-sm">Редактировать</button></td>
             <td><button (click)="onDeleteWorker(worker.id)"class="btn btn-outline-danger btn-sm">Удалить</button></td>
           </tr>
         </tbody>
     </table>
+    <app-edit-worker *ngIf="editById" [workerId]="editById" (sendWorker)="onEditWorker($event)"></app-edit-worker>
 </div>
