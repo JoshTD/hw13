@@ -31,7 +31,7 @@ export class EditWorkerComponent implements OnInit {
       name: this.workerForm.value.Name,
       surname: this.workerForm.value.Surname,
       phone: this.workerForm.value.Phone,
-      type: this.getType(this.workerForm.value.Type),
+      type: parseInt(this.workerForm.value.Type),
       id: this.workerForm.value.Id
     };
     console.log(worker);
@@ -58,14 +58,5 @@ export class EditWorkerComponent implements OnInit {
       ]),
       Id: new FormControl({value: id, disabled: false})
     })
-  }
-  getType(type: string) {
-    switch (type) {
-      case '0': return 0;
-      case '1': return 1;
-      case '2': return 2;
-      case '3': return 3;
-      default: return 0;
-    }
   }
 }
